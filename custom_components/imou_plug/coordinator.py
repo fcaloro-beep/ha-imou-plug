@@ -1,3 +1,7 @@
+import logging
+
+_LOGGER = logging.getLogger(__name__)
+
 from datetime import timedelta
 
 from homeassistant.helpers.update_coordinator import (
@@ -31,7 +35,7 @@ class ImouCoordinator(DataUpdateCoordinator):
 
         super().__init__(
             hass,
-            logger=None,
+            _LOGGER,
             name="Imou Plug",
             update_interval=timedelta(seconds=30),
         )
