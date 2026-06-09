@@ -14,3 +14,4 @@ API_BASE = "https://openapi.easy4ip.com/openapi/accessToken"
 
 CONF_DEVICE_ID = "device_id"
 CONF_PRODUCT_ID = "product_id"
+DOMAIN = "imou_plug"

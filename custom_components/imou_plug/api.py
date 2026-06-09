@@ -3,6 +3,9 @@ import time
 import uuid
 
 import aiohttp
+import logging
+_LOGGER = logging.getLogger(__name__)
+
 
 
 class ImouApi:
@@ -54,7 +57,7 @@ class ImouApi:
                 json=payload,
             ) as response:
 
-                data = await response.json()
+                data = await response.json(content_type=None)
 
         result = data["result"]["data"]
 
@@ -110,7 +113,7 @@ class ImouApi:
                 json=payload,
             ) as response:
 
-                data = await response.json()
+                data = await response.json(content_type=None)
 
         return data["result"]["data"]
 
@@ -149,4 +152,4 @@ class ImouApi:
                 json=payload,
             ) as response:
 
-                return await response.json()
+                return await response.json(content_type=None)

@@ -1,0 +1,16 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Imou Plug",
+        "description": "Configurazione presa Imou",
+        "data": {
+          "app_id": "App ID",
+          "app_secret": "App Secret",
+          "device_id": "Device ID",
+          "product_id": "Product ID"
+        }
+      }
+    }
+  }
+}

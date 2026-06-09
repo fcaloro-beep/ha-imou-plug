@@ -4,12 +4,7 @@ from homeassistant.components.sensor import (
 )
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from .coordinator import ImouCoordinator
-from .const import (
-    PROP_POWER,
-    PROP_CURRENT,
-    PROP_VOLTAGE,
-)
+from .const import DOMAIN, PROP_POWER, PROP_CURRENT, PROP_VOLTAGE
 
 
 async def async_setup_entry(
@@ -17,12 +12,7 @@ async def async_setup_entry(
     entry,
     async_add_entities,
 ):
-
-    coordinator = ImouCoordinator(
-        hass,
-        entry.data,
-    )
-
+    coordinator = hass.data[DOMAIN][entry.entry_id]
     await coordinator.async_config_entry_first_refresh()
 
     async_add_entities(
@@ -37,13 +27,13 @@ async def async_setup_entry(
                 coordinator,
                 "Current",
                 PROP_CURRENT,
-                "mA",
+                "A",
             ),
             ImouSensor(
                 coordinator,
                 "Voltage",
                 PROP_VOLTAGE,
-                "mV",
+                "V",
             ),
         ]
     )
@@ -70,11 +60,22 @@ class ImouSensor(
         )
         self._attr_native_unit_of_measurement = unit
 
+        self._attr_device_info = {
+            "identifiers": {("imou_plug", coordinator.device_id)},
+            "name": "CE2P-NGLP",
+            "manufacturer": "Imou",
+            "model": coordinator.product_id,
+        }
+
     @property
     def native_value(self):
 
-        return self.coordinator.data[
-            "properties"
-        ].get(
-            self.prop
-        )
+        value = self.coordinator.data["properties"].get(self.prop)
+
+        if self.prop == PROP_VOLTAGE:
+            return round(value / 1000, 3)
+
+        if self.prop == PROP_CURRENT:
+            return round(value / 1000, 3)
+
+        return value

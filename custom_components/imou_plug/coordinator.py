@@ -1,6 +1,7 @@
 import logging
 
 _LOGGER = logging.getLogger(__name__)
+_LOGGER.warning("IMOU coordinator module loaded")
 
 from datetime import timedelta
 
@@ -41,8 +42,8 @@ class ImouCoordinator(DataUpdateCoordinator):
         )
 
     async def _async_update_data(self):
-
-        return await self.api.get_properties(
+        _LOGGER.warning("IMOU refresh started")
+        data = await self.api.get_properties(
             self.product_id,
             self.device_id,
             [
@@ -52,3 +53,5 @@ class ImouCoordinator(DataUpdateCoordinator):
                 PROP_VOLTAGE,
             ],
         )
+        _LOGGER.warning(f"IMOU refresh result: {data}")
+        return data

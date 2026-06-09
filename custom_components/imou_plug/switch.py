@@ -1,7 +1,7 @@
 from homeassistant.components.switch import SwitchEntity
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from .coordinator import ImouCoordinator
+from .const import DOMAIN, PROP_SWITCH
 from .const import PROP_SWITCH
 
 
@@ -11,12 +11,7 @@ async def async_setup_entry(
     async_add_entities,
 ):
 
-    coordinator = ImouCoordinator(
-        hass,
-        entry.data,
-    )
-
-    await coordinator.async_config_entry_first_refresh()
+    coordinator = hass.data[DOMAIN][entry.entry_id]
 
     async_add_entities(
         [
@@ -42,6 +37,13 @@ class ImouPlugSwitch(
         self._attr_unique_id = (
             coordinator.device_id
         )
+
+        self._attr_device_info = {
+            "identifiers": {("imou_plug", coordinator.device_id)},
+            "name": "CE2P-NGLP",
+            "manufacturer": "Imou",
+            "model": coordinator.product_id,
+        }
 
     @property
     def is_on(self):
